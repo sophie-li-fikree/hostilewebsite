@@ -1,0 +1,306 @@
+/* style.css — Department of Pending Matters
+   Shared by all five pages. Every page already links it:
+   <link rel="stylesheet" href="style.css">
+   The wording in the content: "..." lines is placeholder. */
+
+:root {
+  --paper: #f4f1e8;   /* off-white form paper */
+  --ink: #1d1d1b;     /* typewriter black */
+  --rule: #6b6b63;    /* grey lines and fine print */
+  --stamp: #a3201b;   /* rubber-stamp red */
+  --field: #fffef9;   /* the form's inner sheet */
+}
+
+/* The page as an official sheet with a double border */
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: Georgia, "Times New Roman", serif;
+  max-width: none;
+  margin: 2rem auto;
+  padding: 2rem 2.5rem 3rem;
+  border: 1px solid var(--rule);
+  outline: 4px double var(--rule);
+  outline-offset: 6px;
+}
+
+/* Faint "PENDING" watermark across every page */
+body::before {
+  content: "PENDING";
+  position: fixed;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-30deg);
+  font-size: 9rem;
+  letter-spacing: 0.2em;
+  color: var(--ink);
+  opacity: 0.05;
+  pointer-events: none;   /* clicks pass straight through it */
+  z-index: 0;
+}
+
+/* Fine print at the bottom of every page */
+body::after {
+  content: "This page is an official record. Unauthorised viewing is permitted.";
+  display: block;
+  margin-top: 3rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--rule);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.65rem;
+  color: var(--rule);
+  text-align: center;
+}
+
+/* Letterhead */
+h1 {
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  font-size: 1.4rem;
+  font-weight: normal;
+  border-bottom: 3px double var(--ink);
+  padding-bottom: 0.75rem;
+}
+
+/* Reference line under the letterhead */
+h1::after {
+  content: "Ref. DPM/27/B-6 · Not valid unless stamped · Do not fold";
+  display: block;
+  margin-top: 0.5rem;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: none;
+  color: var(--rule);
+}
+
+/* Form title in a box, with a revision number */
+h2 {
+  display: inline-block;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  border: 1px solid var(--ink);
+  padding: 0.3rem 0.8rem;
+}
+
+h2::after {
+  content: " (Rev. 03/1987)";
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--rule);
+}
+
+/* The form sheet; every paragraph becomes a numbered section */
+#form {
+  position: relative;
+  background-color: var(--field);
+  border: 1px solid var(--rule);
+  padding: 1.5rem;
+  counter-reset: section;
+}
+
+#form > p {
+  counter-increment: section;
+}
+
+#form > p::before {
+  content: "§" counter(section) ". ";
+  font-family: "Courier New", Courier, monospace;
+  color: var(--rule);
+}
+
+/* Text fields and dropdowns: a line to write on, typed in Courier */
+#form input:not([type="radio"]):not([type="checkbox"]),
+#form select {
+  display: block;
+  width: 60%;
+  margin: 0.5rem 0 1rem;
+  padding: 0.2rem 0;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 1rem;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--ink);
+}
+
+#form input:focus,
+#form select:focus {
+  outline: 2px dashed var(--stamp);
+  outline-offset: 2px;
+}
+
+label {
+  margin-right: 1rem;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  accent-color: var(--ink);
+}
+
+/* An old, slightly bureaucratic button */
+button {
+  position: relative;
+  margin-top: 1rem;
+  padding: 0.5rem 1.4rem;
+  font-family: "Courier New", Courier, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+  background-color: #dcd8cc;
+  border: 2px outset #eeeae0;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #cfcabd;
+}
+
+button:active {
+  border-style: inset;
+}
+
+/* Links: dotted, turning stamp-red on hover */
+a {
+  position: relative;
+  color: var(--ink);
+  text-decoration: underline dotted;
+}
+
+a:hover {
+  color: var(--stamp);
+}
+
+/* p5 canvases sit centred with a thin frame */
+#stage {
+  position: relative;
+}
+
+#stage canvas {
+  display: block;
+  margin: 1.5rem auto;
+  border: 1px solid var(--ink);
+}
+
+/* Lobby messages ("Welcome back...") look rubber-stamped */
+#notices {
+  position: relative;
+}
+
+#notices p {
+  display: inline-block;
+  margin: 0.5rem 1rem 0.5rem 0;
+  padding: 0.3rem 0.8rem;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--stamp);
+  border: 2px solid var(--stamp);
+  transform: rotate(-2deg);
+}
+
+/* Optional: add class="blink" to any element, e.g. <p class="blink">Processing</p> */
+.blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }   /* invisible for the second half of each second */
+}
+
+/* ---------- Character boxes (used by Forms 27-A and 27-B) ---------- */
+
+/* One letter per box, like a paper form */
+#form input[type="text"].boxes,
+#form input[type="text"].teeth {
+  --cell: 1.6rem;                          /* width of one box */
+  box-sizing: border-box;
+  width: calc(20 * var(--cell));           /* 20 boxes */
+  height: 2.2rem;
+  padding: 0 0 0 calc((var(--cell) - 1ch) / 2);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 1.1rem;
+  letter-spacing: calc(var(--cell) - 1ch); /* pushes each letter into its own box */
+  text-transform: uppercase;               /* block capitals, whatever they type */
+  border: none;
+}
+
+/* Full boxes */
+#form input[type="text"].boxes {
+  border: 1px solid var(--ink);
+  background: repeating-linear-gradient(to right,
+    transparent 0 calc(var(--cell) - 1px),
+    var(--ink) calc(var(--cell) - 1px) var(--cell));
+}
+
+/* Teeth: ticks rising from the bottom line only */
+#form input[type="text"].teeth {
+  border-bottom: 1px solid var(--ink);
+  background:
+    linear-gradient(var(--ink), var(--ink))
+      left bottom / 1px 35% no-repeat,
+    repeating-linear-gradient(to right,
+      transparent 0 calc(var(--cell) - 1px),
+      var(--ink) calc(var(--cell) - 1px) var(--cell))
+      bottom / 100% 35% no-repeat;
+}
+
+
+/* A shorter field: 8 boxes */
+#form input[type="text"].short {
+  width: calc(8 * var(--cell));
+}
+
+/* ---------- Full-window pages (used by the Processing page) ---------- */
+/* Add class="fullscreen" to <body> to use this */
+
+/* No paper sheet: the page is the whole window */
+body.fullscreen {
+  max-width: none;
+  margin: 0;
+  padding: 1rem 2rem;
+  border: none;
+  outline: none;
+  overflow: hidden;           /* no scrollbars */
+}
+
+/* The canvas sits behind everything and fills the window */
+body.fullscreen #stage canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: 0;
+  border: none;
+  z-index: 0;
+}
+
+/* Text floats on top of the collage, in stamp red */
+body.fullscreen h1,
+body.fullscreen p {
+  position: relative;
+  z-index: 1;
+  color: var(--stamp);
+  border-color: var(--stamp);
+  pointer-events: none;       /* clicks go through the text to the collage */
+}
+
+/* The fine print moves to the bottom edge of the window */
+body.fullscreen::after {
+  position: fixed;
+  bottom: 0.5rem;
+  left: 0;
+  right: 0;
+  margin: 0;
+  border: none;
+  z-index: 1;
+  color: var(--paper);
+}
+
+.center {
+  text-align: center;
+}
